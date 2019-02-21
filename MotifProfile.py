@@ -11,12 +11,20 @@ from collections import Counter
 
 def profile(dna):
     profile_dic = {'A': [], 'C': [], 'G': [], 'T': []}
-    splitter = lambda x: list([i for i in x])
-    tmp = np.array(list(map(splitter, dna)))
-    for i in range(len(dna[0])):
-        _ = Counter(tmp[:, i])
-        for x in ['A', 'C', 'G', 'T']:
-            profile_dic[x].append(_[x] / 5)
+    if isinstance(dna, list):
+        splitter = lambda x: list([i for i in x])
+        tmp = np.array(list(map(splitter, dna)))
+        for i in range(len(dna[0])):
+            _ = Counter(tmp[:, i])
+            for x in ['A', 'C', 'G', 'T']:
+                profile_dic[x].append(_[x]/10)
+    else:
+        splitter = lambda x: list([i for i in x])
+        tmp = np.array(list(map(splitter, dna)))
+        for i in dna:
+            _ = Counter(i)
+            for x in ['A', 'C', 'G', 'T']:
+                profile_dic[x].append(float(_.get(x, 0)))
     return profile_dic
 
 

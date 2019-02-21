@@ -22,7 +22,8 @@ def profile_most_probable(dna, k, matrix):
                 prob = profile[char][index]
             else:
                 prob *= profile[char][index]
-        prob_str[prob] = text
+        if prob not in prob_str:
+            prob_str[prob] = text
         if prob > highest:
             highest = prob
     return prob_str[highest]
