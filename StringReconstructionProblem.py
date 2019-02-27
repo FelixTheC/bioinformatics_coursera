@@ -6,6 +6,7 @@ Created on Fri Feb 22 12:35:35 2019
 @author: felix
 """
 from collections import defaultdict
+from collections import OrderedDict
 
 
 def reconstruction_problem(motif_matrix):
@@ -42,21 +43,44 @@ def debrujin_string_problem(k, dna):
     return d
 
 
+def debrujin_graph_problem(dna_list):
+    d_suff = defaultdict(str)
+    d_pref = defaultdict(list)
+    k = len(dna_list[0])
+    suffix = list([x[1:] for x in dna_list])
+    prefix = list([x[:k-1] for x in dna_list])
+    for i, motif in enumerate(suffix):
+        d_suff[i] = motif
+    for i, motif in enumerate(prefix):
+        d_pref[motif].extend([i, ])
+    for pkey, pval in d_pref.items():
+        d_pref[pkey] = sorted(list([val for key, val in d_suff.items() if key in pval]))
+    return OrderedDict(sorted(d_pref.items()))
+
+
 if __name__ == '__main__':
-    motif_matrix = ['CT', 'TG',
-                    'TG', 'TC',
-                    'TT', 'TC',
+    motif_matrix = ['GAGG', 'CAGG',
+                    'GGGG', 'GGGA',
+                    'CAGG', 'AGGG',
+                    'GGAG'
                     ]
     lines = []
-    with open('dataset_199_6.txt', 'r+') as file:
+    with open('dataset_200_8.txt', 'r+') as file:
         lines = file.readlines()
-    k = 4 #  int(lines[0].strip())
-    dna = 'AGCCT' #  lines[1].strip()
+    text = list([l.strip() for l in lines])
     with open('tmp.txt', 'w+') as file:
-        for key, val in debrujin_string_problem(k, dna).items():
+        for key, val in debrujin_graph_problem(text).items():
             _ = ','.join(val)
-            print(f'{key}->{_}')
-            #file.write(f'{key}->{_}\n')
+            file.write(f'{key}->{_}\n')
+#    lines = []
+#    with open('dataset_199_6.txt', 'r+') as file:
+#        lines = file.readlines()
+#    k = int(lines[0].strip())
+#    dna = lines[1].strip()
+#    with open('tmp.txt', 'w+') as file:
+#        for key, val in debrujin_string_problem(k, dna).items():
+#            _ = ','.join(val)
+#            file.write(f'{key}->{_}\n')
 #    lines = []
 #    with open('dataset_198_10.txt', 'r+') as file:
 #        lines = file.readlines()
