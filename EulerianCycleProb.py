@@ -19,9 +19,10 @@ def eulerian_cycle_prob(node_edges_list):
         node_edge[x[0]] = list([i.strip() for i in x[1].split(',')])
     length = sum(list([len(i) for i in node_edge.values()]))
     keys = list([i for i in node_edge.keys()])
-    stop = '0' #node_edge[keys[0][0]][0]
+    stop = node_edge[keys[0][0]][0] if node_edge[node_edge[keys[0][0]][0]][0] != keys[0] else keys[0]
+    xkeys = list([i for i in keys if i == stop])
     for i in range(length):
-        for x in keys:
+        for x in xkeys:
             cycle = []
             tmp = copy.deepcopy(node_edge)
             while True:
@@ -41,10 +42,16 @@ def eulerian_cycle_prob(node_edges_list):
     
 if __name__ == '__main__':
     edges = [
-            '0 -> 3, 1',
-            '1 -> 2',
-            '2 -> 0',
-            '3 -> 0',
+            '0 -> 3',
+            '1 -> 0',
+            '2 -> 1, 6',
+            '3 -> 2',
+            '4 -> 2',
+            '5 -> 4',
+            '6 -> 5,8',
+            '7 -> 9',
+            '8 -> 7',
+            '9 -> 6',
             ]
     for i in eulerian_cycle_prob(edges):
         print(i)
