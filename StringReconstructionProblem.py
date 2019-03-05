@@ -55,23 +55,25 @@ def debrujin_graph_problem(dna_list):
         d_pref[motif].extend([i, ])
     for pkey, pval in d_pref.items():
         d_pref[pkey] = sorted(list([val for key, val in d_suff.items() if key in pval]))
+    print(d_suff)
+    print(d_pref)
     return OrderedDict(sorted(d_pref.items()))
 
 
 if __name__ == '__main__':
-    motif_matrix = ['GAGG', 'CAGG',
-                    'GGGG', 'GGGA',
-                    'CAGG', 'AGGG',
-                    'GGAG'
+    motif_matrix = ['GCGA',
+                    'CAAG',
+                    'AAGA',
                     ]
-    lines = []
-    with open('dataset_200_8.txt', 'r+') as file:
-        lines = file.readlines()
-    text = list([l.strip() for l in lines])
-    with open('tmp.txt', 'w+') as file:
-        for key, val in debrujin_graph_problem(text).items():
-            _ = ','.join(val)
-            file.write(f'{key}->{_}\n')
+    print(debrujin_string_problem(4, '0101010100'))
+#    lines = []
+#    with open('dataset_200_8.txt', 'r+') as file:
+#        lines = file.readlines()
+#    text = list([l.strip() for l in lines])
+#    with open('tmp.txt', 'w+') as file:
+#        for key, val in debrujin_graph_problem(lines).items():
+#            _ = ','.join(val)
+#            file.write(f'{key}->{_}\n')
 #    lines = []
 #    with open('dataset_199_6.txt', 'r+') as file:
 #        lines = file.readlines()
