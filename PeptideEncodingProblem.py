@@ -44,12 +44,37 @@ def peptide_encoding(dna, genetic_code):
     return peptides
 
 
+def aminoacid_DNA_codons(): 
+    aminoacidToDNACodons = {}
+    for k,v in GENETICCODE.items():
+        aminoacidToDNACodons.setdefault(v, []).append(k)
+    return aminoacidToDNACodons
+
+
+def times_dna(peptide='LWK'):
+    n = 1
+    codons = aminoacid_DNA_codons()
+    for i in range(len(peptide)):
+        n*=len(codons[peptide[i]])
+    return n
+
+
+def number_subpeptides(n):
+    return  n*(n-1)
+
+
+def number_linear_subpeptides(n):
+    return int(n*(n + 1)/2 + 1)
+
+
 if __name__ == '__main__':
-    dna = 'ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA'
-    lines = []
-    genetic_code = 'VKLFPWFNQY'
-    with open('files/Bacillus_brevis.txt', 'r+') as file:
-        lines = file.readlines()
-        lines = list([i.strip() for i in lines])
-    dna = ''.join(lines)
-    print(len(peptide_encoding(dna, genetic_code)))
+    print(times_dna('CYCLIC'))
+    print(number_subpeptides(1024))
+#    dna = 'ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA'
+#    lines = []
+#    genetic_code = 'VKLFPWFNQY'
+#    with open('files/Bacillus_brevis.txt', 'r+') as file:
+#        lines = file.readlines()
+#        lines = list([i.strip() for i in lines])
+#    dna = ''.join(lines)
+#    print(len(peptide_encoding(dna, genetic_code)))
