@@ -43,6 +43,18 @@ def theoretical_spectrum(peptide):
     return cyclospectrum
 
 
+def theoretical_linear_spectrum(peptide):
+    cyclospectrum = [0, ]
+    x = list(peptide)
+    for j in range(1, len(peptide)):
+        for i in range(0, len(peptide)):
+            y = x[i: i + j]
+            if len(y) == j:
+                cyclospectrum.append(sum([INTEGERMASS[acid] for acid in y]))
+        cyclospectrum.append(sum(INTEGERMASS[acid] for acid in x))
+    return cyclospectrum
+
+
 def cyclopeptide_scoring(peptide, spectrum):
     score = 0
     peptide_dict = Counter(theoretical_spectrum(peptide))
@@ -59,13 +71,30 @@ def cyclopeptide_scoring(peptide, spectrum):
     return score
 
 
+def cyclopeptide_linear_scoring(peptide, spectrum):
+    score = 0
+    peptide_dict = Counter(theoretical_linear_spectrum(peptide))
+    scoring_dict = Counter(spectrum)
+    for pep_key, pep_val in peptide_dict.items():
+        try:
+            x = scoring_dict[pep_key]
+            if x > pep_val:
+                score += pep_val
+            else:
+                score += x
+        except KeyError:
+            print(f'{pep_key} not in scoring')
+    return score
+
+
 if __name__ == '__main__':
-    test_peptide = 'VYYEVDWTMGRQIDPDEYPIAQCTRHRATILTLPDWQM'
-    test_result = 521
-    test_spectrum = list([int(i) for i in open('files/test_cyclopeptide_scoring.txt', 'r+').readline().split(' ')])
-    #print(cyclopeptide_scoring('NQEL', [0, 99, 113, 114, 128, 227, 257, 299, 355, 356, 370, 371, 484]))
-    result = cyclopeptide_scoring(test_peptide, test_spectrum)
-    if result == test_result:
-        print('Test passed')
-    else:
-        print('Test NOT passed')
+    # test_peptide = 'VYYEVDWTMGRQIDPDEYPIAQCTRHRATILTLPDWQM'
+    # test_result = 521
+    test_spectrum = list([int(i) for i in open('files/dataset_4913_1.txt', 'r+').readline().split(' ')])
+    # #print(cyclopeptide_scoring('NQEL', [0, 99, 113, 114, 128, 227, 257, 299, 355, 356, 370, 371, 484]))
+    # result = cyclopeptide_scoring(test_peptide, test_spectrum)
+    # if result == test_result:
+    #     print('Test passed')
+    # else:
+    #     print('Test NOT passed')
+    print(cyclopeptide_linear_scoring('DGHVRHGCNDTNRVLQGEITEGQQWVNRAGKFGWISTSI', test_spectrum))
